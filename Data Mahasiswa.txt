@@ -1,0 +1,124 @@
+program Data_Mahasiswa;
+
+uses
+wincrt;
+
+type mahasiswa = record
+nama : string[20];
+nim : string[9];
+end;
+
+var jumlah : integer;
+mhs : array [1..30] of mahasiswa;
+pil : integer;
+
+procedure load;
+var
+penghubung : file of mahasiswa;
+
+begin
+assign(penghubung,'Data Mahasiswa.txt');
+reset(penghubung);
+while (not(eof(penghubung)) ) do
+begin
+jumlah:=jumlah+1;
+read(penghubung,mhs[jumlah]);
+end;
+
+end;
+
+procedure save;
+var i : integer;
+penghubung : file of mahasiswa;
+begin
+assign(penghubung,'Data Mahasiswa.txt');
+rewrite(penghubung);
+
+for i:=1 to jumlah do
+begin
+write(penghubung,mhs[i]);
+end;
+end;
+
+
+procedure input;
+begin
+jumlah:=jumlah+1;
+write('masukkan nama : ');readln(mhs[jumlah].nama); {memasukkan data nama}
+write('masukkan nim : ');readln(mhs[jumlah].nim); {memasukkan datan NIM}
+end;
+
+procedure update;
+var nim : string[9];
+i,j : integer;
+begin
+writeln('Masukkan NIM mahasiswa yang ingin diupdate : ');readln(nim);
+
+for i:=1 to jumlah do
+begin
+if(mhs[i].nim=nim) then
+begin
+j:=i;
+
+end;
+end;
+write('Masukkan nama baru : '); readln(mhs[j].nama);
+write('Masukkan nim baru : '); readln(mhs[j].nim);
+
+end;
+
+procedure delete;
+var nim : string[9];
+i,j : integer;
+begin
+write('masukkan nim yang mau dihapus'); readln(nim);
+
+
+for i:=1 to jumlah do
+begin
+if(mhs[i].nim=nim) then
+begin
+j:=i;
+
+end;
+end;
+
+
+for i:= j to jumlah do
+begin
+mhs[i]:=mhs[i+1];
+end;
+jumlah:=jumlah-1;
+end;
+
+procedure lihat;
+var i: integer;
+begin
+
+for i:=1 to jumlah do
+begin
+writeln( ' Nama : ',mhs[i].nama,' | NIM : ',mhs[i].nim );
+
+end;
+readln;
+end;
+
+begin
+jumlah:=1;
+load;
+repeat
+writeln('1. Input');
+writeln('2. Update');
+writeln('3. Delete');
+writeln('4. Lihat');
+writeln('5. exit');
+
+readln(pil);
+if pil=1 then input;
+if pil=2 then update;
+if pil=3 then delete;
+if pil=4 then lihat;
+
+until (pil=5);
+save;
+end.
